@@ -1,6 +1,9 @@
 package net.euromc.townydiscordcommands;
 
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Town;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -28,18 +31,22 @@ public class TownCommand extends ListenerAdapter {
         }
 
         EmbedBuilder emb = new EmbedBuilder();
-        emb.setTitle("Town Statistics");
-        emb.addField("Town:", event.getInteraction().getOption("name").getAsString(), false);
-        emb.addField("Mayor:", t.getMayor().getName(), false);
-        emb.addField("Board:", t.getBoard(), false);
-        if (t.hasNation()) {
-            emb.addField("Nation:", t.getNationOrNull().getName(), false);
-        }
-        emb.addField("Fire:", t.isFire() ? "ON" : "OFF", false);
-        emb.addField("Explosions:", t.isExplosion() ? "ON" : "OFF", false);
-        emb.addField("Mob Spawns:", t.hasMobs() ? "ON" : "OFF", false);
-        emb.addField("Resident Count:" , String.valueOf(t.getNumResidents()), false);
         emb.setColor(Color.GREEN);
+        emb.setTitle(t.getName());
+        emb.setDescription("**Board:** " + t.getBoard());
+        emb.addField("Mayor:", t.getMayor().getName(), true);
+        if (t.hasNation()) {
+            emb.addField("Nation:", t.getNationOrNull().getName(), true);
+        }
+        if (TownyEconomyHandler.isActive()) {
+            emb.addField("Bank:", String.valueOf(t.getAccount().getHoldingBalance()), true);
+        }
+        emb.addField("PVP:", t.isPVP() ? "ON" : "OFF", true);
+        emb.addField("Fire:", t.isFire() ? "ON" : "OFF", true);
+        emb.addField("Explosions:", t.isExplosion() ? "ON" : "OFF", true);
+        emb.addField("Mob Spawns:", t.hasMobs() ? "ON" : "OFF", true);
+        emb.addField("Resident Count:" , String.valueOf(t.getNumResidents()), true);
+        emb.setThumbnail("https://static.wikia.nocookie.net/minecraft_gamepedia/images/9/93/Grass_Block_JE7_BE6.png");
 
         event.replyEmbeds(emb.build()).queue();
         // success

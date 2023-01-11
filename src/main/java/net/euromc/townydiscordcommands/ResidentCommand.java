@@ -1,6 +1,7 @@
 package net.euromc.townydiscordcommands;
 
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.object.Resident;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -27,17 +28,21 @@ public class ResidentCommand extends ListenerAdapter {
         }
 
         EmbedBuilder emb = new EmbedBuilder();
-        emb.setTitle("Resident Statistics");
-        emb.addField("Resident:", r.getName(), false);
+        emb.setTitle(r.getName());
+        emb.setDescription("**Activity:** " + (r.isOnline() ? "ONLINE" : "OFFLINE"));
+        emb.setThumbnail("https://cravatar.eu/helmhead/" + r.getName() + "/600.png");
+        emb.setColor(Color.GREEN);
         if (r.hasTown()) {
-            emb.addField("Town:", r.getTownOrNull().getName(), false);
+            emb.addField("Town:" , r.getTownOrNull().getName(), true);
         }
         if (r.hasNation()) {
-            emb.addField("Nation:" , r.getNationOrNull().getName(), false);
+            emb.addField("Nation: " , r.getNationOrNull().getName(), true);
         }
-        emb.addField("Activity:", r.isOnline() ? "ONLINE" : "OFFLINE" , false);
-        emb.setColor(Color.GREEN);
+        if (TownyEconomyHandler.isActive()) {
+            emb.addField("Balance:", String.valueOf(r.getAccountOrNull().getHoldingBalance()), true);
+        }
 
         event.replyEmbeds(emb.build()).queue();
+
     }
 }

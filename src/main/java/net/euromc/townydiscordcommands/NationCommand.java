@@ -25,12 +25,13 @@ public class NationCommand extends ListenerAdapter {
         }
 
         EmbedBuilder emb = new EmbedBuilder();
-        emb.setTitle("Nation Statistics");
-        emb.addField("Nation:", n.getName(), false);
-        emb.addField("Leader:", n.getKing().getName(), false);
-        emb.addField("Capital:", n.getCapital().getName(), false);
-        emb.addField("Town Count:", String.valueOf(n.getNumTowns()), false);
         emb.setColor(Color.GREEN);
+        emb.setThumbnail("https://static.wikia.nocookie.net/minecraft_gamepedia/images/1/1a/Diamond_Ore_JE1_BE1.png");
+        emb.setTitle(n.getName());
+        emb.setDescription("**Board:** " + n.getBoard());
+        emb.addField("Leader:", n.getKing().getName(), true);
+        emb.addField("Capital:", n.getCapital().getName(), true);
+        emb.addField("Town Count:", String.valueOf(n.getNumTowns()), true);
 
         event.replyEmbeds(emb.build()).queue();
     }
